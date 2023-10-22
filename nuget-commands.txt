@@ -1,0 +1,4 @@
+dotnet pack -c Release
+
+nuget push '.\Nik.Common\bin\Release\Nik.Common.1.0.0.nupkg' -source Nik
+nuget push '.\Nik.Common.Abstractions\bin\Release\Nik.Common.Abstractions.1.0.0.nupkg' -source Nik
