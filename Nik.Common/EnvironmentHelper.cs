@@ -29,7 +29,6 @@ public class EnvironmentHelper : IEnvironmentHelper
             environmentName = configuration.GetValue<string>("EnvironmentName")!;
             if (!ValidEnvironmentNamess.Contains(environmentName))
             {
-                environmentName = "Development";
                 throw new Exception($"Unknown environment name: {environmentName}");
             }
         }
