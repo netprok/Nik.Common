@@ -2,13 +2,16 @@
 
 public class EnvironmentHelper : IEnvironmentHelper
 {
-    private string[] ValidEnvironmentNamess = new string[] { "Development", "Staging", "Production" };
+    private const string DotnetVariableName = "DOTNET_ENVIRONMENT";
+    private const string HostingVariableName = "ASPNETCORE_ENVIRONMENT";
+    private string[] ValidEnvironmentNames = new string[] { "Development", "Staging", "Production" };
     private string environmentName = string.Empty;
 
     public IConfigurationRoot CreateConfiguration()
     {
         var environment = GetEnvironmentName();
-        Environment.SetEnvironmentVariable("DOTNET_ENVIRONMENT", environment);
+        Environment.SetEnvironmentVariable(DotnetVariableName, environment);
+        Environment.SetEnvironmentVariable(HostingVariableName, environment);
 
         var configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json")
@@ -28,7 +31,7 @@ public class EnvironmentHelper : IEnvironmentHelper
 
             var tempName = configuration.GetValue<string>("EnvironmentName")!;
             environmentName = tempName;
-            if (!ValidEnvironmentNamess.Contains(tempName))
+            if (!ValidEnvironmentNames.Contains(tempName))
             {
                 environmentName = "Development";
                 throw new Exception($"Unknown environment name: {tempName}");
