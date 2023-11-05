@@ -26,10 +26,12 @@ public class EnvironmentHelper : IEnvironmentHelper
                .AddJsonFile("appsettings.json")
                .Build();
 
-            environmentName = configuration.GetValue<string>("EnvironmentName")!;
-            if (!ValidEnvironmentNamess.Contains(environmentName))
+            var tempName = configuration.GetValue<string>("EnvironmentName")!;
+            environmentName = tempName;
+            if (!ValidEnvironmentNamess.Contains(tempName))
             {
-                throw new Exception($"Unknown environment name: {environmentName}");
+                environmentName = "Development";
+                throw new Exception($"Unknown environment name: {tempName}");
             }
         }
 
