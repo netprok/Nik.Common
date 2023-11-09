@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nik.Common.Abstractions", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_commands", "_commands", "{5B06F977-E48C-4EDA-A08D-F69B46D4D4B2}"
 	ProjectSection(SolutionItems) = preProject
-		nuget-commands.txt = nuget-commands.txt
+		_commands\nuget-commands.txt = _commands\nuget-commands.txt
 	EndProjectSection
 EndProject
 Global
