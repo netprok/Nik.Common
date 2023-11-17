@@ -7,6 +7,7 @@ public static class ServicesExtensions
         services.AddSingleton<IStringFormatter, EnglishStringFormatter>();
         services.AddSingleton<IHashGenerator, SHA256HashGenerator>();
         services.AddSingleton<IEnvironmentHelper, EnvironmentHelper>();
+        services.AddSingleton<IObjectMapper, ObjectMapper>();
 
         return services;
     }

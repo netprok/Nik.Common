@@ -1,8 +1,10 @@
-﻿namespace Nik.Common;
+﻿using Nik.Common.Abstractions;
 
-public static class ObjectMapper
+namespace Nik.Common;
+
+public class ObjectMapper : IObjectMapper
 {
-    public static TDestination Map<TDestination>(object source)
+    public TDestination Map<TDestination>(object source)
         where TDestination : new()
     {
         if (source == null)
@@ -35,12 +37,12 @@ public static class ObjectMapper
         return destination;
     }
 
-    private static bool IsPrimitiveType(Type type)
+    private bool IsPrimitiveType(Type type)
     {
         return type.IsPrimitive || type.IsValueType || type == typeof(string);
     }
 
-    private static PropertyInfo? FindDestinationProperty(PropertyInfo sourceProperty, PropertyInfo[] destinationProperties)
+    private PropertyInfo? FindDestinationProperty(PropertyInfo sourceProperty, PropertyInfo[] destinationProperties)
     {
         return destinationProperties.FirstOrDefault(D =>
             D.Name.ToLower() == sourceProperty.Name.ToLower() &&
