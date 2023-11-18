@@ -11,4 +11,11 @@ public static class ServicesExtensions
 
         return services;
     }
+
+    public static IServiceCollection UseAesEncryption(this IServiceCollection services)
+    {
+        services.AddSingleton<IEncryptor, AESEncryptor>();
+
+        return services;
+    }
 }
