@@ -1,6 +1,4 @@
-﻿using Nik.Common.Abstractions;
-
-namespace Nik.Common;
+﻿namespace Nik.Common;
 
 public class ObjectMapper : IObjectMapper
 {
@@ -44,11 +42,15 @@ public class ObjectMapper : IObjectMapper
 
     private PropertyInfo? FindDestinationProperty(PropertyInfo sourceProperty, PropertyInfo[] destinationProperties)
     {
+        Type[] enumValidTypeNames = [typeof(int), typeof(uint), typeof(short), typeof(ushort), typeof(string)];
+
         return destinationProperties.FirstOrDefault(D =>
             D.Name.ToLower() == sourceProperty.Name.ToLower() &&
             (
                 (D.PropertyType.FullName?.Contains(sourceProperty.PropertyType.FullName ?? string.Empty) ?? false) ||
-                (sourceProperty.PropertyType.FullName?.Contains(D.PropertyType.FullName ?? string.Empty) ?? false)
+                (sourceProperty.PropertyType.FullName?.Contains(D.PropertyType.FullName ?? string.Empty) ?? false) ||
+                (D.PropertyType.IsEnum && enumValidTypeNames.Contains(sourceProperty.PropertyType)) ||
+                (sourceProperty.PropertyType.IsEnum && enumValidTypeNames.Contains(D.PropertyType))
             )
         );
     }
