@@ -5,12 +5,19 @@ public class ObjectMapper : IObjectMapper
     public TDestination Map<TDestination>(object source)
         where TDestination : new()
     {
+        var destination = new TDestination();
+
+        Map<TDestination>(source, ref destination);
+
+        return destination;
+    }
+
+    public void Map<TDestination>(object source, ref TDestination destination) where TDestination : new()
+    {
         if (source == null)
         {
             throw new ArgumentNullException(nameof(source));
         }
-
-        var destination = new TDestination();
 
         var sourceProperties = source.GetType().GetProperties();
         var destinationProperties = typeof(TDestination).GetProperties();
@@ -31,8 +38,6 @@ public class ObjectMapper : IObjectMapper
                 destinationProperty.SetValue(destination, value);
             }
         }
-
-        return destination;
     }
 
     private bool IsPrimitiveType(Type type)

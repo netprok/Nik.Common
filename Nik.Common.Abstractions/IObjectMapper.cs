@@ -1,8 +1,8 @@
-﻿using Nik.Common;
-namespace Nik.Common.Abstractions
+﻿namespace Nik.Common.Abstractions;
+
+public interface IObjectMapper
 {
-    public interface IObjectMapper
-    {
-        TDestination Map<TDestination>(object source) where TDestination : new();
-    }
+    TDestination Map<TDestination>(object source) where TDestination : new();
+
+    void Map<TDestination>(object source, ref TDestination destination) where TDestination : new();
 }
