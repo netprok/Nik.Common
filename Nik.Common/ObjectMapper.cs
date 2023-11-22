@@ -7,12 +7,12 @@ public class ObjectMapper : IObjectMapper
     {
         var destination = new TDestination();
 
-        Map<TDestination>(source, ref destination);
+        MapUpdate<TDestination>(source, ref destination);
 
         return destination;
     }
 
-    public void Map<TDestination>(object source, ref TDestination destination) where TDestination : new()
+    public void MapUpdate<TDestination>(object source, ref TDestination destination) where TDestination : new()
     {
         if (source == null)
         {
@@ -55,7 +55,8 @@ public class ObjectMapper : IObjectMapper
                 (D.PropertyType.FullName?.Contains(sourceProperty.PropertyType.FullName ?? string.Empty) ?? false) ||
                 (sourceProperty.PropertyType.FullName?.Contains(D.PropertyType.FullName ?? string.Empty) ?? false) ||
                 (D.PropertyType.IsEnum && enumValidTypeNames.Contains(sourceProperty.PropertyType)) ||
-                (sourceProperty.PropertyType.IsEnum && enumValidTypeNames.Contains(D.PropertyType))
+                (sourceProperty.PropertyType.IsEnum && enumValidTypeNames.Contains(D.PropertyType)) ||
+                (sourceProperty.PropertyType.IsClass && D.PropertyType.IsClass)
             )
         );
     }
