@@ -2,11 +2,21 @@
 
 public static class ServicesExtensions
 {
-    public static IServiceCollection UseCommon(this IServiceCollection services)
+    public static IServiceCollection UseEnvironmentHelper(this IServiceCollection services)
+    {
+        services.AddSingleton<IEnvironmentHelper, EnvironmentHelper>();
+
+        IEnvironmentHelper environmentHelper = new EnvironmentHelper();
+        var configuration = environmentHelper.CreateConfiguration();
+        services.AddSingleton(configuration);
+
+        return services;
+    }
+
+public static IServiceCollection UseCommon(this IServiceCollection services)
     {
         services.AddSingleton<IStringFormatter, EnglishStringFormatter>();
         services.AddSingleton<IHashGenerator, SHA256HashGenerator>();
-        services.AddSingleton<IEnvironmentHelper, EnvironmentHelper>();
         services.AddSingleton<IObjectMapper, ObjectMapper>();
 
         return services;
