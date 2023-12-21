@@ -8,6 +8,7 @@ public static class ServicesExtensions
         services.AddSingleton<IStringFormatter, EnglishStringFormatter>();
         services.AddSingleton<IHashGenerator, SHA256HashGenerator>();
         services.AddSingleton<IObjectMapper, ObjectMapper>();
+        services.AddSingleton<IListSplitter, ListSplitter>();
 
         return services;
     }
