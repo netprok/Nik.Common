@@ -2,12 +2,12 @@
 
 public class AesEncryptor : IAesEncryptor
 {
-    public byte[] Encrypt(string plainText, AESOptions aesSettings)
+    public byte[] Encrypt(string plainText, AesOptions aesOptions)
     {
         if (string.IsNullOrEmpty(plainText))
             throw new Exception("Nothing to encrypt.");
 
-        var (key, iv) = GetKeyAndIv(aesSettings);
+        var (key, iv) = GetKeyAndIv(aesOptions);
 
         byte[] encrypted;
 
@@ -32,12 +32,12 @@ public class AesEncryptor : IAesEncryptor
         return encrypted;
     }
 
-    public string Decrypt(byte[] cipherText, AESOptions aesSettings)
+    public string Decrypt(byte[] cipherText, AesOptions aesOptions)
     {
         if (cipherText == null || cipherText.Length <= 0)
             throw new Exception("Nothing to decrypt.");
 
-        var (key, iv) = GetKeyAndIv(aesSettings);
+        var (key, iv) = GetKeyAndIv(aesOptions);
 
         using (Aes aes = Aes.Create())
         {
@@ -57,13 +57,13 @@ public class AesEncryptor : IAesEncryptor
         }
     }
 
-    private (byte[], byte[]) GetKeyAndIv(AESOptions aesSettings)
+    private (byte[], byte[]) GetKeyAndIv(AesOptions aesOptions)
     {
-        if (string.IsNullOrWhiteSpace(aesSettings.Key))
+        if (string.IsNullOrWhiteSpace(aesOptions.Key))
             throw new Exception("The encryption key not found.");
-        if (string.IsNullOrWhiteSpace(aesSettings.IV))
+        if (string.IsNullOrWhiteSpace(aesOptions.IV))
             throw new Exception("The encryption initialization vector not found.");
 
-        return (Encoding.ASCII.GetBytes(aesSettings.Key), Encoding.ASCII.GetBytes(aesSettings.IV));
+        return (Encoding.ASCII.GetBytes(aesOptions.Key), Encoding.ASCII.GetBytes(aesOptions.IV));
     }
 }

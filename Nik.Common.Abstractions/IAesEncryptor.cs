@@ -2,7 +2,7 @@
 
 public interface IAesEncryptor
 {
-    string Decrypt(byte[] cipherText, AESOptions aesSettings);
+    string Decrypt(byte[] cipherText, AesOptions aesOptions);
 
-    byte[] Encrypt(string plainText, AESOptions aesSettings);
+    byte[] Encrypt(string plainText, AesOptions aesOptions);
 }
