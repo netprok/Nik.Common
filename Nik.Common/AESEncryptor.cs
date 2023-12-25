@@ -1,34 +1,20 @@
 ﻿namespace Nik.Common;
 
-public class AESEncryptor : IEncryptor
+public class AesEncryptor : IAesEncryptor
 {
-    private byte[] Key { get; }
-    private byte[] IV { get; }
-
-    public AESEncryptor(IOptions<AESSettings> options)
-    {
-        AESSettings aesSettings = options.Value;
-
-        if (string.IsNullOrWhiteSpace(aesSettings.Key))
-            throw new Exception("The encryption key not found.");
-        if (string.IsNullOrWhiteSpace(aesSettings.IV))
-            throw new Exception("The encryption initialization vector not found.");
-
-        Key = Encoding.ASCII.GetBytes(aesSettings.Key);
-        IV = Encoding.ASCII.GetBytes(aesSettings.IV);
-    }
-
-    public byte[] Encrypt(string plainText)
+    public byte[] Encrypt(string plainText, AESOptions aesSettings)
     {
         if (string.IsNullOrEmpty(plainText))
             throw new Exception("Nothing to encrypt.");
+
+        var (key, iv) = GetKeyAndIv(aesSettings);
 
         byte[] encrypted;
 
         using (Aes aes = Aes.Create())
         {
             aes.Padding = PaddingMode.ISO10126;
-            ICryptoTransform encryptor = aes.CreateEncryptor(Key, IV);
+            ICryptoTransform encryptor = aes.CreateEncryptor(key, iv);
 
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -46,15 +32,17 @@ public class AESEncryptor : IEncryptor
         return encrypted;
     }
 
-    public string Decrypt(byte[] cipherText)
+    public string Decrypt(byte[] cipherText, AESOptions aesSettings)
     {
         if (cipherText == null || cipherText.Length <= 0)
             throw new Exception("Nothing to decrypt.");
 
+        var (key, iv) = GetKeyAndIv(aesSettings);
+
         using (Aes aes = Aes.Create())
         {
             aes.Padding = PaddingMode.ISO10126;
-            ICryptoTransform decryptor = aes.CreateDecryptor(Key, IV);
+            ICryptoTransform decryptor = aes.CreateDecryptor(key, iv);
 
             using (MemoryStream memoryStream = new MemoryStream(cipherText))
             {
@@ -67,5 +55,15 @@ public class AESEncryptor : IEncryptor
                 }
             }
         }
+    }
+
+    private (byte[], byte[]) GetKeyAndIv(AESOptions aesSettings)
+    {
+        if (string.IsNullOrWhiteSpace(aesSettings.Key))
+            throw new Exception("The encryption key not found.");
+        if (string.IsNullOrWhiteSpace(aesSettings.IV))
+            throw new Exception("The encryption initialization vector not found.");
+
+        return (Encoding.ASCII.GetBytes(aesSettings.Key), Encoding.ASCII.GetBytes(aesSettings.IV));
     }
 }
