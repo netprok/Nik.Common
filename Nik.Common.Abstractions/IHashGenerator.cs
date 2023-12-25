@@ -2,7 +2,7 @@
 
 public interface IHashGenerator
 {
-    string GetHashCode(string value);
+    string Generate(string value);
 
-    string GetHashCode(string data, string key);
+    string Generate(string data, string key);
 }

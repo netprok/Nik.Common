@@ -14,3 +14,4 @@ global using System.Security.Cryptography;
 global using System.Text;
 global using Nik.Common.Models;
 global using System.Collections;
+global using Blake3;
