@@ -2,7 +2,7 @@
 
 public class AesEncryptor : IAesEncryptor
 {
-    public byte[] Encrypt(string plainText, AesOptions aesOptions)
+    public byte[] Encrypt(string plainText, AesConfig aesOptions)
     {
         if (string.IsNullOrEmpty(plainText))
             throw new Exception("Nothing to encrypt.");
@@ -32,7 +32,7 @@ public class AesEncryptor : IAesEncryptor
         return encrypted;
     }
 
-    public string Decrypt(byte[] cipherText, AesOptions aesOptions)
+    public string Decrypt(byte[] cipherText, AesConfig aesOptions)
     {
         if (cipherText == null || cipherText.Length <= 0)
             throw new Exception("Nothing to decrypt.");
@@ -57,7 +57,7 @@ public class AesEncryptor : IAesEncryptor
         }
     }
 
-    private (byte[], byte[]) GetKeyAndIv(AesOptions aesOptions)
+    private (byte[], byte[]) GetKeyAndIv(AesConfig aesOptions)
     {
         if (string.IsNullOrWhiteSpace(aesOptions.Key))
             throw new Exception("The encryption key not found.");
