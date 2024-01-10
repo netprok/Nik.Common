@@ -2,7 +2,7 @@
 
 public static class ServicesExtensions
 {
-    public static IServiceCollection UseCommon(this IServiceCollection services)
+    public static IServiceCollection AddNikCommon(this IServiceCollection services)
     {
         services.AddSingleton<IEnvironmentHelper, EnvironmentHelper>();
         services.AddSingleton<IStringFormatter, EnglishStringFormatter>();
