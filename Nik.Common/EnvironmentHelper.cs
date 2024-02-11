@@ -14,16 +14,25 @@ public class EnvironmentHelper : IEnvironmentHelper
     private string[] ValidEnvironments = new string[] { Development, Staging, Production };
     private string activeEnvironment = string.Empty;
 
-    public IConfigurationRoot CreateConfiguration()
+    public IConfigurationRoot CreateConfiguration(params string[] additionalFiles)
     {
         var environment = GetEnvironmentName();
         Environment.SetEnvironmentVariable(DotnetVariable, environment);
         Environment.SetEnvironmentVariable(AspNetCoreVariable, environment);
 
-        var configuration = new ConfigurationBuilder()
-            .AddJsonFile(AppSettingsFile)
-            .AddJsonFile(GetEnvironmentFile(environment))
-            .Build();
+        IConfigurationBuilder builder = new ConfigurationBuilder()
+                    .AddJsonFile(AppSettingsFile)
+                    .AddJsonFile(GetEnvironmentFile(environment));
+
+        if (additionalFiles.Length > 0)
+        {
+            foreach (var file in additionalFiles)
+            {
+                builder.AddJsonFile(file);
+            }
+        }
+
+        var configuration = builder.Build();
 
         return configuration;
     }

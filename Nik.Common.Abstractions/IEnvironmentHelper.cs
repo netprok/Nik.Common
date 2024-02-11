@@ -2,7 +2,7 @@
 
 public interface IEnvironmentHelper
 {
-    IConfigurationRoot CreateConfiguration();
+    IConfigurationRoot CreateConfiguration(params string[] additionalFiles);
 
     string GetEnvironmentName();
 
