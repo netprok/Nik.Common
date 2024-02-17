@@ -1,5 +1,3 @@
-
-
 namespace Nik.Common.Tests;
 
 public sealed class HashTests

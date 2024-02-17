@@ -1,6 +1,6 @@
 ﻿namespace Nik.Common;
 
-public class EnvironmentHelper : IEnvironmentHelper
+public static class AppContext
 {
     private const string DotnetVariable = "DOTNET_ENVIRONMENT";
     private const string AspNetCoreVariable = "ASPNETCORE_ENVIRONMENT";
@@ -11,18 +11,48 @@ public class EnvironmentHelper : IEnvironmentHelper
 
     private const string AppSettingsFile = "appsettings.json";
 
-    private string[] ValidEnvironments = new string[] { Development, Staging, Production };
-    private string activeEnvironment = string.Empty;
+    private static readonly string[] ValidEnvironments = [Development, Staging, Production];
 
-    public IConfigurationRoot CreateConfiguration(params string[] additionalFiles)
+    private static string? _environment;
+
+    private static IConfigurationRoot? _configuration;
+
+    public static string Environment
     {
-        var environment = GetEnvironmentName();
-        Environment.SetEnvironmentVariable(DotnetVariable, environment);
-        Environment.SetEnvironmentVariable(AspNetCoreVariable, environment);
+        get
+        {
+            CheckIfInitialized();
+
+            return _environment!;
+        }
+    }
+
+    public static IConfigurationRoot Configuration
+    {
+        get
+        {
+            CheckIfInitialized();
+
+            return _configuration!;
+        }
+    }
+
+    public static bool IsProduction => Environment.Equals("production", StringComparison.OrdinalIgnoreCase);
+
+    public static bool IsStaging => Environment.Equals("staging", StringComparison.OrdinalIgnoreCase);
+
+    public static bool IsDevelopment => Environment.Equals("development", StringComparison.OrdinalIgnoreCase);
+
+    public static IServiceCollection InitAppContext(this IServiceCollection services, params string[] additionalFiles)
+    {
+        _environment = GetEnvironmentFromAppSettingsFile();
+
+        System.Environment.SetEnvironmentVariable(DotnetVariable, _environment);
+        System.Environment.SetEnvironmentVariable(AspNetCoreVariable, _environment);
 
         IConfigurationBuilder builder = new ConfigurationBuilder()
                     .AddJsonFile(AppSettingsFile)
-                    .AddJsonFile(GetEnvironmentFile(environment));
+                    .AddJsonFile(GetEnvironmentFile(_environment));
 
         if (additionalFiles.Length > 0)
         {
@@ -32,15 +62,43 @@ public class EnvironmentHelper : IEnvironmentHelper
             }
         }
 
-        return builder.Build();
+        DeleteOtherSettingsFiles();
+
+        _configuration = builder.Build();
+
+        return services;
     }
 
-    public IConfigurationRoot CreateConfiguration(IServiceCollection services, params string[] additionalFiles)
+    private static void CheckIfInitialized()
     {
-        var configuration = CreateConfiguration(additionalFiles);
-        services.Configure<IConfiguration>(configuration);
+        if (_configuration is null || _environment is null)
+        {
+            throw new Exception("App context has not been initialized yet, call services.InitAppContext()");
+        }
+    }
 
-        return configuration;
+    private static string GetEnvironmentFromAppSettingsFile()
+    {
+        if (!File.Exists(AppSettingsFile))
+        {
+            throw new Exception($"App settings file not found: {AppSettingsFile}");
+        }
+
+        var jsonEnvironment = new ConfigurationBuilder()
+                   .AddJsonFile(AppSettingsFile)
+                   .Build()
+                   .GetValue<string>("EnvironmentName")!;
+
+        if (string.IsNullOrWhiteSpace(jsonEnvironment))
+        {
+            jsonEnvironment = Development;
+        }
+        if (!ValidEnvironments.Contains(jsonEnvironment))
+        {
+            throw new Exception($"Unknown environment name: {jsonEnvironment}");
+        }
+
+        return jsonEnvironment;
     }
 
     private static string GetEnvironmentFile(string environment)
@@ -48,36 +106,11 @@ public class EnvironmentHelper : IEnvironmentHelper
         return $"appsettings.{environment}.json";
     }
 
-    public string GetEnvironmentName()
-    {
-        if (string.IsNullOrWhiteSpace(activeEnvironment))
-        {
-            var configuration = new ConfigurationBuilder()
-               .AddJsonFile(AppSettingsFile)
-               .Build();
-
-            var tempName = configuration.GetValue<string>("EnvironmentName")!;
-            if (string.IsNullOrWhiteSpace(tempName))
-            {
-                tempName = Development;
-            }
-            if (!ValidEnvironments.Contains(tempName))
-            {
-                throw new Exception($"Unknown environment name: {tempName}");
-            }
-            activeEnvironment = tempName;
-
-            DeleteOtherSettingsFiles();
-        }
-
-        return activeEnvironment;
-    }
-
-    private void DeleteOtherSettingsFiles()
+    private static void DeleteOtherSettingsFiles()
     {
         IEnumerable<string> otherFiles = ValidEnvironments
-            .Except(new string[] { activeEnvironment })
-            .Select(env => GetEnvironmentFile(env));
+        .Except(new string[] { _environment! })
+        .Select(env => GetEnvironmentFile(env));
 
         foreach (var file in otherFiles)
         {
@@ -93,10 +126,4 @@ public class EnvironmentHelper : IEnvironmentHelper
             }
         }
     }
-
-    public bool IsProduction() => GetEnvironmentName().ToLower() == "production";
-
-    public bool IsStaging() => GetEnvironmentName().ToLower() == "staging";
-
-    public bool IsDevelopment() => GetEnvironmentName().ToLower() == "development";
 }
