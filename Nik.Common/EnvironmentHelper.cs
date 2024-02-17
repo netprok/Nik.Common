@@ -14,7 +14,7 @@ public class EnvironmentHelper : IEnvironmentHelper
     private string[] ValidEnvironments = new string[] { Development, Staging, Production };
     private string activeEnvironment = string.Empty;
 
-    public IConfigurationRoot CreateConfiguration(IServiceCollection? services = null, params string[] additionalFiles)
+    public IConfigurationRoot CreateConfiguration(params string[] additionalFiles)
     {
         var environment = GetEnvironmentName();
         Environment.SetEnvironmentVariable(DotnetVariable, environment);
@@ -32,11 +32,13 @@ public class EnvironmentHelper : IEnvironmentHelper
             }
         }
 
-        var configuration = builder.Build();
-        if (services is not null)
-        {
-            services.Configure<IConfiguration>(configuration);
-        }
+        return builder.Build();
+    }
+
+    public IConfigurationRoot CreateConfiguration(IServiceCollection services, params string[] additionalFiles)
+    {
+        var configuration = CreateConfiguration(additionalFiles);
+        services.Configure<IConfiguration>(configuration);
 
         return configuration;
     }
