@@ -1,6 +1,5 @@
 ﻿global using Blake3;
 
-global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 
 global using Nik.Common.Abstractions;
