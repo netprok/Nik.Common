@@ -16,8 +16,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Nik.Common.Models\Nik.Common.Models.csproj" />
-  </ItemGroup>
-
 </Project>

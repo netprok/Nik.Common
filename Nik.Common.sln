@@ -12,10 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_commands", "_commands", "{
 		_commands\nuget-commands.txt = _commands\nuget-commands.txt
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nik.Common.Models", "Nik.Common.Models\Nik.Common.Models.csproj", "{ECB586F2-DB2D-4A07-B20B-8E9C851CA49A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nik.Common.Tests", "Nik.Common.Tests\Nik.Common.Tests.csproj", "{636884F9-9E38-4D8C-B5FA-085636D45E4A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,14 +26,6 @@ Global
 		{D81BAD84-A664-4F92-A25D-54A193F77969}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D81BAD84-A664-4F92-A25D-54A193F77969}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D81BAD84-A664-4F92-A25D-54A193F77969}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ECB586F2-DB2D-4A07-B20B-8E9C851CA49A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ECB586F2-DB2D-4A07-B20B-8E9C851CA49A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ECB586F2-DB2D-4A07-B20B-8E9C851CA49A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ECB586F2-DB2D-4A07-B20B-8E9C851CA49A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{636884F9-9E38-4D8C-B5FA-085636D45E4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{636884F9-9E38-4D8C-B5FA-085636D45E4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{636884F9-9E38-4D8C-B5FA-085636D45E4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{636884F9-9E38-4D8C-B5FA-085636D45E4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

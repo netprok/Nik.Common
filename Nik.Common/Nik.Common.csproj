@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Nik.Common.Abstractions\Nik.Common.Abstractions.csproj" />
-    <ProjectReference Include="..\Nik.Common.Models\Nik.Common.Models.csproj" />
   </ItemGroup>
 
 </Project>
