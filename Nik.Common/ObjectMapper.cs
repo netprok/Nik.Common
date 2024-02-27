@@ -83,8 +83,8 @@ public class ObjectMapper : IObjectMapper
         return destinationProperties.FirstOrDefault(destinationProperty =>
             destinationProperty.Name.ToLower() == sourceProperty.Name.ToLower() &&
             (
-                (destinationProperty.PropertyType.FullName!.ToLower()?.Contains(sourceProperty.PropertyType.FullName!.ToLower() ?? string.Empty) ?? false) ||
-                (sourceProperty.PropertyType.FullName!.ToLower()?.Contains(destinationProperty.PropertyType.FullName.ToLower() ?? string.Empty) ?? false) ||
+                (destinationProperty.PropertyType.FullName?.Contains(sourceProperty.PropertyType.FullName ?? string.Empty) ?? false) ||
+                (sourceProperty.PropertyType.FullName?.Contains(destinationProperty.PropertyType.FullName ?? string.Empty) ?? false) ||
                 (destinationProperty.PropertyType.IsEnum && enumValidTypeNames.Contains(sourceProperty.PropertyType)) ||
                 (sourceProperty.PropertyType.IsEnum && enumValidTypeNames.Contains(destinationProperty.PropertyType)) ||
                 (sourceProperty.PropertyType.IsClass && destinationProperty.PropertyType.IsClass)
