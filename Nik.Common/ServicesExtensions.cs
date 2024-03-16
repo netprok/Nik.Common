@@ -7,6 +7,7 @@ public static class ServicesExtensions
         services.AddSingleton<IStringFormatter, EnglishStringFormatter>();
         services.AddSingleton<IObjectMapper, ObjectMapper>();
         services.AddSingleton<IListSplitter, ListSplitter>();
+        services.AddSingleton<IRandomTextGenerator, RandomTextGenerator>();
 
         return services;
     }
